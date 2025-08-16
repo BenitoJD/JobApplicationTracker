@@ -234,12 +234,15 @@
                      Margin="0,0,24,0"/>
 
             <ComboBox Style="{StaticResource FlatComboBoxStyle}"
-                      ItemsSource="{Binding Source={StaticResource ApplicationStatusValues}}"
-                      SelectedItem="{Binding FilterStatus}"
-                      Width="200" 
-                      Height="40" 
-                      Margin="0,0,24,0"
-                      VerticalAlignment="Center"/>
+                ItemsSource="{Binding Source={StaticResource ApplicationStatusValues}}"
+                SelectedItem="{Binding FilterStatus}"
+                Width="200" 
+                Height="40" 
+                Margin="0,0,24,0"
+                VerticalAlignment="Center"
+                IsEditable="True"
+                IsReadOnly="True"
+                Text="Select Status"/>
 
             <Button Content="CLEAR FILTERS"
                     Command="{Binding ClearFiltersCommand}"
