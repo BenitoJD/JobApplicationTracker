@@ -22,13 +22,11 @@
                 <x:Type TypeName="enums:ApplicationStatus"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
-
         <!-- Style to highlight rows with upcoming follow-up dates -->
         <Style TargetType="DataGridRow" x:Key="FollowUpHighlightStyle">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsFollowUpDueSoon}" Value="True">
                     <Setter Property="Background" Value="#FFF9E79F" />
-                    <!-- A light yellow color -->
                     <Setter Property="ToolTip" Value="Follow-up is due within 7 days!"/>
                 </DataTrigger>
             </Style.Triggers>
@@ -51,19 +49,27 @@
             <TextBox
                 materialDesign:HintAssist.Hint="Search Company Name"
                 Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                Width="200"
+                Width="200" Height="40"
                 Text="{Binding SearchCompanyName, UpdateSourceTrigger=PropertyChanged}"
                 VerticalAlignment="Center" Margin="0 0 16 0"/>
-
             <ComboBox
                 materialDesign:HintAssist.Hint="Filter by Status"
                 ItemsSource="{Binding Source={StaticResource ApplicationStatusValues}}"
                 SelectedItem="{Binding FilterStatus}"
-                Width="150" Margin="0 0 16 0"/>
-
-            <Button Content="Clear Filters" Command="{Binding ClearFiltersCommand}" Style="{StaticResource MaterialDesignOutlinedButton}" VerticalAlignment="Bottom"/>
-
-            <Button Content="Export to CSV" Command="{Binding ExportToCsvCommand}" Margin="16 0 0 0" VerticalAlignment="Bottom"/>
+                Width="150" Height="40" Margin="0 0 16 0"
+                VerticalAlignment="Center"/>
+            <Button Content="Clear Filters"
+                    Command="{Binding ClearFiltersCommand}"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Height="40"
+                    VerticalAlignment="Center"
+                    Margin="0 0 0 0"/>
+            <Button Content="Export to CSV"
+                    Command="{Binding ExportToCsvCommand}"
+                    Margin="16 0 0 0"
+                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Height="40"
+                    VerticalAlignment="Center"/>
         </StackPanel>
 
         <!-- Data Grid -->
@@ -96,7 +102,6 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
-
                 <DataGridTemplateColumn Header="Follow-Up Date" Width="140" SortMemberPath="FollowUpDate">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -109,17 +114,15 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
-
                 <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="2*"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <!-- Buttons -->
+        <!-- Main actions Buttons -->
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 16 0 0">
             <Button Content="Add New" Command="{Binding AddApplicationCommand}" Style="{StaticResource MaterialDesignRaisedButton}"/>
             <Button Content="Save Selected" Command="{Binding EditApplicationCommand}" Margin="8 0 0 0"/>
             <Button Content="Delete Selected" Command="{Binding DeleteApplicationCommand}" Margin="8 0 0 0" Style="{StaticResource MaterialDesignFlatButton}" Foreground="Red"/>
         </StackPanel>
-
     </Grid>
 </Window>
