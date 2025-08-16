@@ -4,9 +4,122 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:JobApplicationTracker"
+        xmlns:enums="clr-namespace:JobApplicationTracker.Enums"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Job Application Tracker" Height="1430" Width="2816"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="{materialDesign:MaterialDesignFont}">
+
+    <Window.Resources>
+        <!-- Data source for the ApplicationStatus enum ComboBox -->
+        <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="ApplicationStatusValues">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="enums:ApplicationStatus"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+
+        <!-- Style to highlight rows with upcoming follow-up dates -->
+        <Style TargetType="DataGridRow" x:Key="FollowUpHighlightStyle">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsFollowUpDueSoon}" Value="True">
+                    <Setter Property="Background" Value="#FFF9E79F" />
+                    <!-- A light yellow color -->
+                    <Setter Property="ToolTip" Value="Follow-up is due within 7 days!"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Grid.Row="0" Text="Job Application Tracker" Style="{StaticResource MaterialDesignHeadline4TextBlock}" Margin="0 0 0 16"/>
+
+        <!-- Filters and Actions -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 0 0 16">
+            <TextBox
+                materialDesign:HintAssist.Hint="Search Company Name"
+                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                Width="200"
+                Text="{Binding SearchCompanyName, UpdateSourceTrigger=PropertyChanged}"
+                VerticalAlignment="Center" Margin="0 0 16 0"/>
+
+            <ComboBox
+                materialDesign:HintAssist.Hint="Filter by Status"
+                ItemsSource="{Binding Source={StaticResource ApplicationStatusValues}}"
+                SelectedItem="{Binding FilterStatus}"
+                Width="150" Margin="0 0 16 0"/>
+
+            <Button Content="Clear Filters" Command="{Binding ClearFiltersCommand}" Style="{StaticResource MaterialDesignOutlinedButton}" VerticalAlignment="Bottom"/>
+
+            <Button Content="Export to CSV" Command="{Binding ExportToCsvCommand}" Margin="16 0 0 0" VerticalAlignment="Bottom"/>
+        </StackPanel>
+
+        <!-- Data Grid -->
+        <DataGrid Grid.Row="2" 
+                  ItemsSource="{Binding ApplicationsView}"
+                  SelectedItem="{Binding SelectedApplication}"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserSortColumns="True"
+                  materialDesign:DataGridAssist.CellPadding="13 8 8 8"
+                  materialDesign:DataGridAssist.ColumnHeaderPadding="8"
+                  RowStyle="{StaticResource FollowUpHighlightStyle}"
+                  IsReadOnly="False" SelectionChanged="DataGrid_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Company Name" Binding="{Binding CompanyName, ValidatesOnDataErrors=True}" Width="*"/>
+                <DataGridTextColumn Header="Job Title" Binding="{Binding JobTitle, ValidatesOnDataErrors=True}" Width="*"/>
+                <DataGridComboBoxColumn Header="Status" 
+                                        ItemsSource="{Binding Source={StaticResource ApplicationStatusValues}}"
+                                        SelectedValueBinding="{Binding Status}"
+                                        Width="120"/>
+                <DataGridTemplateColumn Header="Date Applied" Width="140" SortMemberPath="DateApplied">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding DateApplied, StringFormat='yyyy-MM-dd'}" VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding DateApplied, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Follow-Up Date" Width="140" SortMemberPath="FollowUpDate">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding FollowUpDate, StringFormat='yyyy-MM-dd'}" VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding FollowUpDate, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="2*"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 16 0 0">
+            <Button Content="Add New" Command="{Binding AddApplicationCommand}" Style="{StaticResource MaterialDesignRaisedButton}"/>
+            <Button Content="Save Selected" Command="{Binding EditApplicationCommand}" Margin="8 0 0 0"/>
+            <Button Content="Delete Selected" Command="{Binding DeleteApplicationCommand}" Margin="8 0 0 0" Style="{StaticResource MaterialDesignFlatButton}" Foreground="Red"/>
+        </StackPanel>
 
     </Grid>
 </Window>

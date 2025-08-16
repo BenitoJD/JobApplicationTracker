@@ -77,6 +77,8 @@ namespace JobApplicationTracker.ViewModels
                 {
                     _jobApplication.FollowUpDate = value;
                     OnPropertyChanged();
+                    OnPropertyChanged(nameof(IsFollowUpDueSoon));
+
                 }
             }
         }
