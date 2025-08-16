@@ -26,8 +26,8 @@ namespace JobApplicationTracker.Data
                 CompanyName = "Tech Solutions",
                 JobTitle = "Software Engineer",
                 Status = Enums.ApplicationStatus.Applied,
-                DataApplied = DateTime.Now.AddDays(-10),
-                FollowUpDate = DateTime.Now.AddDays(5),
+                DataApplied = new DateTime(2025, 8, 5, 15, 25, 30, 183, DateTimeKind.Local).AddTicks(6486),
+                FollowUpDate = null,
                 Notes = "Initial application submitted."
             }, new JobApplication
             {
@@ -35,8 +35,8 @@ namespace JobApplicationTracker.Data
                 CompanyName = "Innovatech",
                 JobTitle = "Data Analyst",
                 Status = Enums.ApplicationStatus.Interviewing,
-                DataApplied = DateTime.Now.AddDays(-5),
-                FollowUpDate = DateTime.Now.AddDays(3),
+                DataApplied = new DateTime(2025, 8, 10, 15, 25, 30, 185, DateTimeKind.Local).AddTicks(9775),
+                FollowUpDate = null,
                 Notes = "Interview scheduled for next week."
             }, new JobApplication
             {
@@ -44,8 +44,8 @@ namespace JobApplicationTracker.Data
                 CompanyName = "Global Corp",
                 JobTitle = "Project Manager",
                 Status = Enums.ApplicationStatus.Offer,
-                DataApplied = DateTime.Now.AddDays(-15),
-                FollowUpDate = DateTime.Now.AddDays(10),
+                DataApplied = new DateTime(2025, 7, 31, 15, 25, 30, 185, DateTimeKind.Local).AddTicks(9781),
+                FollowUpDate = null ,
                 Notes = "Received offer letter, pending decision."
             }
             );

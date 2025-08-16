@@ -21,7 +21,7 @@ namespace JobApplicationTracker.Models
 
         public ApplicationStatus Status { get; set; }
 
-        public DateTime DataApplied { get; set; } = DateTime.Now;
+        public DateTime DataApplied { get; set; }
 
         public DateTime? FollowUpDate { get; set; }
 
