@@ -5,15 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:JobApplicationTracker"
         xmlns:enums="clr-namespace:JobApplicationTracker.Enums"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="Job Application Tracker" Height="1430" Width="2816"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        Background="{DynamicResource MaterialDesignPaper}"
-        TextElement.FontWeight="Medium"
-        TextElement.FontSize="14"
-        FontFamily="{materialDesign:MaterialDesignFont}">
+        Background="#FFFFFF"
+        FontFamily="Segoe UI"
+        FontSize="13"
+        FontWeight="Normal">
 
     <Window.Resources>
         <!-- Data source for the ApplicationStatus enum ComboBox -->
@@ -22,18 +20,194 @@
                 <x:Type TypeName="enums:ApplicationStatus"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
-        <!-- Style to highlight rows with upcoming follow-up dates -->
+
+        <!-- Flat Button Style -->
+        <Style x:Key="FlatButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#000000"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="0"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#333333"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#555555"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Flat Outline Button Style -->
+        <Style x:Key="FlatOutlineButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#000000"/>
+            <Setter Property="BorderBrush" Value="#000000"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="20,12"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="0"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#F5F5F5"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#E0E0E0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Delete Button Style -->
+        <Style x:Key="DeleteButtonStyle" TargetType="Button" BasedOn="{StaticResource FlatOutlineButtonStyle}">
+            <Setter Property="BorderBrush" Value="#000000"/>
+            <Setter Property="Foreground" Value="#000000"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#000000"/>
+                    <Setter Property="Foreground" Value="#FFFFFF"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Flat TextBox Style -->
+        <Style x:Key="FlatTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Padding" Value="8,8"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                <ScrollViewer x:Name="PART_ContentHost" 
+                                            Padding="{TemplateBinding Padding}"
+                                            VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock x:Name="PlaceholderText"
+                                     Text="{TemplateBinding Tag}"
+                                     Foreground="#999999"
+                                     Padding="{TemplateBinding Padding}"
+                                     VerticalAlignment="Center"
+                                     IsHitTestVisible="False"
+                                     Visibility="Collapsed"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Text" Value="">
+                                <Setter TargetName="PlaceholderText" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#000000"/>
+                                <Setter Property="BorderThickness" Value="0,0,0,2"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Flat ComboBox Style -->
+        <Style x:Key="FlatComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Padding" Value="8,8"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <!-- DataGrid Style -->
+        <Style x:Key="FlatDataGridStyle" TargetType="DataGrid">
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="#F0F0F0"/>
+            <Setter Property="VerticalGridLinesBrush" Value="Transparent"/>
+            <Setter Property="RowBackground" Value="#FFFFFF"/>
+            <Setter Property="AlternatingRowBackground" Value="#FAFAFA"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+        </Style>
+
+        <!-- DataGrid Header Style -->
+        <Style x:Key="FlatColumnHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F8F8F8"/>
+            <Setter Property="Foreground" Value="#333333"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Padding" Value="12,16"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+
+        <!-- DataGrid Cell Style -->
+        <Style x:Key="FlatCellStyle" TargetType="DataGridCell">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="12,12"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Background" Value="#F0F0F0"/>
+                    <Setter Property="Foreground" Value="#000000"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Follow-up highlight style -->
         <Style TargetType="DataGridRow" x:Key="FollowUpHighlightStyle">
+            <Setter Property="Background" Value="Transparent"/>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding IsFollowUpDueSoon}" Value="True">
-                    <Setter Property="Background" Value="#FFF9E79F" />
+                    <Setter Property="Background" Value="#F5F5F5"/>
+                    <Setter Property="BorderBrush" Value="#000000"/>
+                    <Setter Property="BorderThickness" Value="2,0,0,0"/>
                     <Setter Property="ToolTip" Value="Follow-up is due within 7 days!"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
     </Window.Resources>
 
-    <Grid Margin="16">
+    <Grid Margin="32">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -42,32 +216,41 @@
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <TextBlock Grid.Row="0" Text="Job Application Tracker" Style="{StaticResource MaterialDesignHeadline4TextBlock}" Margin="0 0 0 16"/>
+        <TextBlock Grid.Row="0" 
+                   Text="JOB APPLICATION TRACKER" 
+                   FontSize="28" 
+                   FontWeight="Light" 
+                   Foreground="#000000"
+                   Margin="0,0,0,48"/>
 
         <!-- Filters and Actions -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0 0 0 16">
-            <TextBox
-                materialDesign:HintAssist.Hint="Search Company Name"
-                Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                Width="200" Height="40"
-                Text="{Binding SearchCompanyName, UpdateSourceTrigger=PropertyChanged}"
-                VerticalAlignment="Center" Margin="0 0 16 0"/>
-            <ComboBox
-                materialDesign:HintAssist.Hint="Filter by Status"
-                ItemsSource="{Binding Source={StaticResource ApplicationStatusValues}}"
-                SelectedItem="{Binding FilterStatus}"
-                Width="150" Height="40" Margin="0 0 16 0"
-                VerticalAlignment="Center"/>
-            <Button Content="Clear Filters"
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,32">
+            <TextBox Style="{StaticResource FlatTextBoxStyle}"
+                     Tag="Search Company Name"
+                     Width="240" 
+                     Height="40"
+                     Text="{Binding SearchCompanyName, UpdateSourceTrigger=PropertyChanged}"
+                     VerticalAlignment="Center" 
+                     Margin="0,0,24,0"/>
+
+            <ComboBox Style="{StaticResource FlatComboBoxStyle}"
+                      ItemsSource="{Binding Source={StaticResource ApplicationStatusValues}}"
+                      SelectedItem="{Binding FilterStatus}"
+                      Width="200" 
+                      Height="40" 
+                      Margin="0,0,24,0"
+                      VerticalAlignment="Center"/>
+
+            <Button Content="CLEAR FILTERS"
                     Command="{Binding ClearFiltersCommand}"
-                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Style="{StaticResource FlatOutlineButtonStyle}"
                     Height="40"
                     VerticalAlignment="Center"
-                    Margin="0 0 0 0"/>
-            <Button Content="Export to CSV"
+                    Margin="0,0,24,0"/>
+
+            <Button Content="EXPORT CSV"
                     Command="{Binding ExportToCsvCommand}"
-                    Margin="16 0 0 0"
-                    Style="{StaticResource MaterialDesignOutlinedButton}"
+                    Style="{StaticResource FlatOutlineButtonStyle}"
                     Height="40"
                     VerticalAlignment="Center"/>
         </StackPanel>
@@ -79,50 +262,87 @@
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   CanUserSortColumns="True"
-                  materialDesign:DataGridAssist.CellPadding="13 8 8 8"
-                  materialDesign:DataGridAssist.ColumnHeaderPadding="8"
+                  Style="{StaticResource FlatDataGridStyle}"
+                  ColumnHeaderStyle="{StaticResource FlatColumnHeaderStyle}"
+                  CellStyle="{StaticResource FlatCellStyle}"
                   RowStyle="{StaticResource FollowUpHighlightStyle}"
-                  IsReadOnly="False" SelectionChanged="DataGrid_SelectionChanged">
+                  IsReadOnly="False" 
+                  SelectionChanged="DataGrid_SelectionChanged">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Company Name" Binding="{Binding CompanyName, ValidatesOnDataErrors=True}" Width="*"/>
-                <DataGridTextColumn Header="Job Title" Binding="{Binding JobTitle, ValidatesOnDataErrors=True}" Width="*"/>
-                <DataGridComboBoxColumn Header="Status" 
+                <DataGridTextColumn Header="COMPANY NAME" 
+                                    Binding="{Binding CompanyName, ValidatesOnDataErrors=True}" 
+                                    Width="*"
+                                    HeaderStyle="{StaticResource FlatColumnHeaderStyle}"/>
+                <DataGridTextColumn Header="JOB TITLE" 
+                                    Binding="{Binding JobTitle, ValidatesOnDataErrors=True}" 
+                                    Width="*"
+                                    HeaderStyle="{StaticResource FlatColumnHeaderStyle}"/>
+                <DataGridComboBoxColumn Header="STATUS" 
                                         ItemsSource="{Binding Source={StaticResource ApplicationStatusValues}}"
                                         SelectedValueBinding="{Binding Status}"
-                                        Width="120"/>
-                <DataGridTemplateColumn Header="Date Applied" Width="140" SortMemberPath="DateApplied">
+                                        Width="140"
+                                        HeaderStyle="{StaticResource FlatColumnHeaderStyle}"/>
+                <DataGridTemplateColumn Header="DATE APPLIED" 
+                                        Width="160" 
+                                        SortMemberPath="DateApplied"
+                                        HeaderStyle="{StaticResource FlatColumnHeaderStyle}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding DateApplied, StringFormat='yyyy-MM-dd'}" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding DateApplied, StringFormat='yyyy-MM-dd'}" 
+                                       VerticalAlignment="Center"
+                                       Padding="12,0"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <DatePicker SelectedDate="{Binding DateApplied, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" />
+                            <DatePicker SelectedDate="{Binding DateApplied, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" 
+                                        Background="Transparent"
+                                        BorderThickness="0"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Follow-Up Date" Width="140" SortMemberPath="FollowUpDate">
+                <DataGridTemplateColumn Header="FOLLOW-UP DATE" 
+                                        Width="160" 
+                                        SortMemberPath="FollowUpDate"
+                                        HeaderStyle="{StaticResource FlatColumnHeaderStyle}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding FollowUpDate, StringFormat='yyyy-MM-dd'}" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding FollowUpDate, StringFormat='yyyy-MM-dd'}" 
+                                       VerticalAlignment="Center"
+                                       Padding="12,0"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <DatePicker SelectedDate="{Binding FollowUpDate, UpdateSourceTrigger=PropertyChanged}"/>
+                            <DatePicker SelectedDate="{Binding FollowUpDate, UpdateSourceTrigger=PropertyChanged}"
+                                        Background="Transparent"
+                                        BorderThickness="0"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Notes" Binding="{Binding Notes}" Width="2*"/>
+                <DataGridTextColumn Header="NOTES" 
+                                    Binding="{Binding Notes}" 
+                                    Width="2*"
+                                    HeaderStyle="{StaticResource FlatColumnHeaderStyle}"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <!-- Main actions Buttons -->
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 16 0 0">
-            <Button Content="Add New" Command="{Binding AddApplicationCommand}" Style="{StaticResource MaterialDesignRaisedButton}"/>
-            <Button Content="Save Selected" Command="{Binding EditApplicationCommand}" Margin="8 0 0 0"/>
-            <Button Content="Delete Selected" Command="{Binding DeleteApplicationCommand}" Margin="8 0 0 0" Style="{StaticResource MaterialDesignFlatButton}" Foreground="Red"/>
+        <!-- Main Action Buttons -->
+        <StackPanel Grid.Row="3" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Right" 
+                    Margin="0,32,0,0">
+            <Button Content="ADD NEW" 
+                    Command="{Binding AddApplicationCommand}" 
+                    Style="{StaticResource FlatButtonStyle}"/>
+            <Button Content="SAVE SELECTED" 
+                    Command="{Binding EditApplicationCommand}" 
+                    Style="{StaticResource FlatOutlineButtonStyle}"
+                    Margin="16,0,0,0"/>
+            <Button Content="DELETE SELECTED" 
+                    Command="{Binding DeleteApplicationCommand}" 
+                    Style="{StaticResource DeleteButtonStyle}"
+                    Margin="16,0,0,0"/>
         </StackPanel>
     </Grid>
 </Window>

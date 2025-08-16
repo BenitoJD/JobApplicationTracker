@@ -6,17 +6,15 @@
         xmlns:local="clr-namespace:JobApplicationTracker.Views"
         xmlns:enums="clr-namespace:JobApplicationTracker.Enums"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="Add/Edit Job Application" 
         SizeToContent="WidthAndHeight" 
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize"
-        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-        Background="{DynamicResource MaterialDesignPaper}"
-        TextElement.FontWeight="Medium"
-        TextElement.FontSize="14"
-        FontFamily="{materialDesign:MaterialDesignFont}">
+        Background="#FFFFFF"
+        FontFamily="Segoe UI"
+        FontSize="13"
+        FontWeight="Normal">
 
     <Window.Resources>
         <!-- Data source for the ApplicationStatus enum ComboBox -->
@@ -25,53 +23,379 @@
                 <x:Type TypeName="enums:ApplicationStatus"/>
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
+
+        <!-- Flat TextBox Style -->
+        <Style x:Key="FlatTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Padding" Value="0,12"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                <ScrollViewer x:Name="PART_ContentHost" 
+                                            Padding="{TemplateBinding Padding}"
+                                            VerticalAlignment="Center"/>
+                            </Border>
+                            <TextBlock x:Name="PlaceholderText"
+                                     Text="{TemplateBinding Tag}"
+                                     Foreground="#999999"
+                                     Padding="{TemplateBinding Padding}"
+                                     VerticalAlignment="Top"
+                                     Margin="0,0,0,0"
+                                     IsHitTestVisible="False"
+                                     FontSize="11"
+                                     FontWeight="Medium"
+                                     Visibility="Collapsed"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Text" Value="">
+                                <Setter TargetName="PlaceholderText" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#000000"/>
+                                <Setter Property="BorderThickness" Value="0,0,0,2"/>
+                                <Setter TargetName="PlaceholderText" Property="Foreground" Value="#000000"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Flat MultiLine TextBox Style -->
+        <Style x:Key="FlatMultiLineTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource FlatTextBoxStyle}">
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                <ScrollViewer x:Name="PART_ContentHost" 
+                                            Padding="{TemplateBinding Padding}"
+                                            VerticalAlignment="Top"/>
+                            </Border>
+                            <TextBlock x:Name="PlaceholderText"
+                                     Text="{TemplateBinding Tag}"
+                                     Foreground="#999999"
+                                     Padding="{TemplateBinding Padding}"
+                                     VerticalAlignment="Top"
+                                     IsHitTestVisible="False"
+                                     Visibility="Collapsed"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Text" Value="">
+                                <Setter TargetName="PlaceholderText" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#000000"/>
+                                <Setter Property="BorderThickness" Value="2"/>
+                                <Setter TargetName="PlaceholderText" Property="Foreground" Value="#000000"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Flat ComboBox Style -->
+        <Style x:Key="FlatComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Padding" Value="0,12"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton x:Name="ToggleButton"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                        ClickMode="Press">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Grid>
+                                            <Border Background="{TemplateBinding Background}"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}"/>
+                                            <Path x:Name="Arrow"
+                                                  Fill="#666666"
+                                                  HorizontalAlignment="Right"
+                                                  VerticalAlignment="Center"
+                                                  Margin="0,0,8,0"
+                                                  Data="M 0 0 L 4 4 L 8 0 Z"/>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+                            <ContentPresenter x:Name="ContentSite"
+                                            IsHitTestVisible="False"
+                                            Content="{TemplateBinding SelectionBoxItem}"
+                                            ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                            ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                            Margin="{TemplateBinding Padding}"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Left"/>
+                            <TextBox x:Name="PART_EditableTextBox"
+                                    Style="{x:Null}"
+                                    Background="Transparent"
+                                    BorderThickness="0"
+                                    IsReadOnly="{TemplateBinding IsReadOnly}"
+                                    Visibility="Hidden"
+                                    Padding="{TemplateBinding Padding}"
+                                    VerticalAlignment="Center"/>
+                            <Popup x:Name="Popup"
+                                   Placement="Bottom"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   PopupAnimation="Slide">
+                                <Grid MinWidth="{TemplateBinding ActualWidth}"
+                                      MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border Background="#FFFFFF"
+                                            BorderThickness="1"
+                                            BorderBrush="#CCCCCC">
+                                        <ScrollViewer>
+                                            <StackPanel IsItemsHost="True"/>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Grid>
+                            </Popup>
+                            <TextBlock x:Name="PlaceholderText"
+                                     Text="{TemplateBinding Tag}"
+                                     Foreground="#999999"
+                                     Padding="{TemplateBinding Padding}"
+                                     VerticalAlignment="Top"
+                                     FontSize="11"
+                                     FontWeight="Medium"
+                                     IsHitTestVisible="False"
+                                     Visibility="Collapsed"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="SelectedItem" Value="{x:Null}">
+                                <Setter TargetName="PlaceholderText" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#000000"/>
+                                <Setter Property="BorderThickness" Value="0,0,0,2"/>
+                                <Setter TargetName="PlaceholderText" Property="Foreground" Value="#000000"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Flat DatePicker Style -->
+        <Style x:Key="FlatDatePickerStyle" TargetType="DatePicker">
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#CCCCCC"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="Padding" Value="0,12"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DatePicker">
+                        <Grid>
+                            <Border Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <DatePickerTextBox x:Name="PART_TextBox"
+                                                     Grid.Column="0"
+                                                     Background="Transparent"
+                                                     BorderThickness="0"
+                                                     Padding="{TemplateBinding Padding}"
+                                                     VerticalAlignment="Center"/>
+                                    <Button x:Name="PART_Button"
+                                            Grid.Column="1"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            Width="20"
+                                            Height="20"
+                                            Margin="4,0">
+                                        <Path Fill="#666666"
+                                              Data="M19,3H18V1H16V3H8V1H6V3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,19H5V8H19V19M12,15A1,1 0 0,1 11,14A1,1 0 0,1 12,13A1,1 0 0,1 13,14A1,1 0 0,1 12,15Z"/>
+                                    </Button>
+                                </Grid>
+                            </Border>
+                            <TextBlock x:Name="PlaceholderText"
+                                     Text="{TemplateBinding Tag}"
+                                     Foreground="#999999"
+                                     Padding="{TemplateBinding Padding}"
+                                     VerticalAlignment="Top"
+                                     FontSize="11"
+                                     FontWeight="Medium"
+                                     IsHitTestVisible="False"
+                                     Visibility="Collapsed"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="SelectedDate" Value="{x:Null}">
+                                <Setter TargetName="PlaceholderText" Property="Visibility" Value="Visible"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#000000"/>
+                                <Setter Property="BorderThickness" Value="0,0,0,2"/>
+                                <Setter TargetName="PlaceholderText" Property="Foreground" Value="#000000"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Flat Button Style -->
+        <Style x:Key="FlatButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#000000"/>
+            <Setter Property="Foreground" Value="#FFFFFF"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="24,12"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="0"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#333333"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#555555"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Flat Cancel Button Style -->
+        <Style x:Key="FlatCancelButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#666666"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="24,12"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="0"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#F0F0F0"/>
+                                <Setter Property="Foreground" Value="#000000"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#E0E0E0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Field Label Style -->
+        <Style x:Key="FieldLabelStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Foreground" Value="#666666"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
     </Window.Resources>
 
-    <StackPanel Margin="24">
-        <TextBox
-            materialDesign:HintAssist.Hint="Company Name*"
-            Margin="0 0 0 16"
-            Text="{Binding Application.CompanyName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-            Width="350"/>
+    <StackPanel Margin="48" Width="400">
+        <TextBlock Text="ADD/EDIT APPLICATION" 
+                   FontSize="20" 
+                   FontWeight="Light" 
+                   Foreground="#000000"
+                   Margin="0,0,0,32"/>
 
-        <TextBox
-            materialDesign:HintAssist.Hint="Job Title*"
-            Margin="0 0 0 16"
-            Text="{Binding Application.JobTitle, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-            Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+        <Grid Margin="0,0,0,20">
+            <TextBlock Text="COMPANY NAME *" Style="{StaticResource FieldLabelStyle}"/>
+            <TextBox Style="{StaticResource FlatTextBoxStyle}"
+                     Margin="0,16,0,0"
+                     Text="{Binding Application.CompanyName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+        </Grid>
 
-        <ComboBox
-            materialDesign:HintAssist.Hint="Status"
-            Margin="0 0 0 16"
-            ItemsSource="{Binding Source={StaticResource ApplicationStatusValues}}"
-            SelectedItem="{Binding Application.Status}"/>
+        <Grid Margin="0,0,0,20">
+            <TextBlock Text="JOB TITLE *" Style="{StaticResource FieldLabelStyle}"/>
+            <TextBox Style="{StaticResource FlatTextBoxStyle}"
+                     Margin="0,16,0,0"
+                     Text="{Binding Application.JobTitle, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+        </Grid>
 
-        <DatePicker
-            materialDesign:HintAssist.Hint="Date Applied*"
-            Margin="0 0 0 16"
-            SelectedDate="{Binding Application.DateApplied, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"
-            Style="{StaticResource MaterialDesignFloatingHintDatePicker}"/>
+        <Grid Margin="0,0,0,20">
+            <TextBlock Text="STATUS" Style="{StaticResource FieldLabelStyle}"/>
+            <ComboBox Style="{StaticResource FlatComboBoxStyle}"
+                      Margin="0,16,0,0"
+                      ItemsSource="{Binding Source={StaticResource ApplicationStatusValues}}"
+                      SelectedItem="{Binding Application.Status}"/>
+        </Grid>
 
-        <DatePicker
-            materialDesign:HintAssist.Hint="Follow-Up Date"
-            Margin="0 0 0 16"
-            SelectedDate="{Binding Application.FollowUpDate, UpdateSourceTrigger=PropertyChanged}"
-            Style="{StaticResource MaterialDesignFloatingHintDatePicker}"/>
+        <Grid Margin="0,0,0,20">
+            <TextBlock Text="DATE APPLIED *" Style="{StaticResource FieldLabelStyle}"/>
+            <DatePicker Style="{StaticResource FlatDatePickerStyle}"
+                        Margin="0,16,0,0"
+                        SelectedDate="{Binding Application.DateApplied, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"/>
+        </Grid>
 
-        <TextBox
-            materialDesign:HintAssist.Hint="Notes"
-            Text="{Binding Application.Notes}"
-            Style="{StaticResource MaterialDesignOutlinedTextBox}"
-            TextWrapping="Wrap"
-            AcceptsReturn="True"
-            VerticalScrollBarVisibility="Auto"
-            Height="100"/>
+        <Grid Margin="0,0,0,20">
+            <TextBlock Text="FOLLOW-UP DATE" Style="{StaticResource FieldLabelStyle}"/>
+            <DatePicker Style="{StaticResource FlatDatePickerStyle}"
+                        Margin="0,16,0,0"
+                        SelectedDate="{Binding Application.FollowUpDate, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+
+        <Grid Margin="0,0,0,32">
+            <TextBlock Text="NOTES" Style="{StaticResource FieldLabelStyle}"/>
+            <TextBox Style="{StaticResource FlatMultiLineTextBoxStyle}"
+                     Margin="0,16,0,0"
+                     Text="{Binding Application.Notes}"
+                     TextWrapping="Wrap"
+                     AcceptsReturn="True"
+                     VerticalScrollBarVisibility="Auto"
+                     Height="100"/>
+        </Grid>
 
         <!-- Action Buttons -->
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 24 0 0">
-            <Button Content="Cancel" Command="{Binding CancelCommand}" Style="{StaticResource MaterialDesignFlatButton}" IsCancel="True"/>
-            <Button Content="Save" Command="{Binding SaveCommand}" Margin="8 0 0 0" IsDefault="True"/>
+        <StackPanel Orientation="Horizontal" 
+                    HorizontalAlignment="Right">
+            <Button Content="CANCEL" 
+                    Command="{Binding CancelCommand}" 
+                    Style="{StaticResource FlatCancelButtonStyle}" 
+                    IsCancel="True"/>
+            <Button Content="SAVE" 
+                    Command="{Binding SaveCommand}" 
+                    Style="{StaticResource FlatButtonStyle}"
+                    Margin="16,0,0,0" 
+                    IsDefault="True"/>
         </StackPanel>
     </StackPanel>
 </Window>
